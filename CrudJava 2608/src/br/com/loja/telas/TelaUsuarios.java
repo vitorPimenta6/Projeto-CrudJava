@@ -75,6 +75,71 @@ ResultSet rs = null;
         
     }
     
+    private void alterar(){
+        String sql = "UPDATE usuarios set usuario=?, fone=?, login=?, senha=?,"
+                + "perfil=? WHERE iduser=?";
+
+       
+        try {
+       pst = conexao.prepareStatement(sql);
+       pst.setString(1, txtNome.getText());
+       pst.setString(2, txtTelefone.getText());
+       pst.setString(3, txtLogin.getText());
+       String captura_senha = new String (txtSenha.getPassword());
+       pst.setString(4, captura_senha);       
+       pst.setString(5, comboPerfil.getSelectedItem().toString());
+       pst.setString(6, txtID.getText());
+       
+            if(txtID.getText().isEmpty() || txtNome.getText().isEmpty() ||
+            txtTelefone.getText().isEmpty() || txtLogin.getText().isEmpty() ||
+            txtSenha.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Preencha todos os campos para prosseguir!");   
+            } else {
+       int resultado = pst.executeUpdate();
+       if (resultado==1){
+          JOptionPane.showMessageDialog(null, "Dados de usuário alterados com sucesso!"); 
+         txtID.setText(null);
+         txtNome.setText(null);
+         txtTelefone.setText(null);
+         txtLogin.setText(null);
+         txtSenha.setText(null);        
+       }
+            }
+       
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);  
+        }
+    }
+    
+    private void apagar(){
+    
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja apagar esse usuário?", 
+        "Atenção", JOptionPane.YES_NO_OPTION);
+        
+        if (confirma == JOptionPane.YES_OPTION ){
+            String sql = "DELETE FROM usuarios WHERE iduser=?";
+            
+            try {
+            pst = conexao.prepareStatement(sql); 
+            pst.setString(1, txtID.getText());
+            int apagado = pst.executeUpdate();
+            if (apagado > 0) {
+             JOptionPane.showMessageDialog(null, "Usuário apagado com sucesso!"); 
+         txtID.setText(null);
+         txtNome.setText(null);
+         txtTelefone.setText(null);
+         txtLogin.setText(null);
+         txtSenha.setText(null);    
+            }
+            
+            } catch (Exception e){
+               JOptionPane.showMessageDialog(null, e);   
+                
+            }
+        }
+        
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -141,9 +206,19 @@ ResultSet rs = null;
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/loja/ícones/icones/update.png"))); // NOI18N
         btnAlterar.setPreferredSize(new java.awt.Dimension(80, 80));
         btnAlterar.setRequestFocusEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnApagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/loja/ícones/icones/delete.png"))); // NOI18N
         btnApagar.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApagarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,6 +319,14 @@ ResultSet rs = null;
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
        cadastrar();
     }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        alterar();
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarActionPerformed
+       apagar();
+    }//GEN-LAST:event_btnApagarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
